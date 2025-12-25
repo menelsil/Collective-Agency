@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mathematics of Collective Mind - Полное исследование</title>
+    <title>Mathematics of Collective Mind - Улучшенная версия</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* CSS Variables for Theme Switching */
         :root {
+            /* Dark Theme */
             --primary-dark: #0f1419;
             --secondary-dark: #1a1f2e;
             --accent-blue: #4a90a4;
@@ -20,6 +22,19 @@
             --border-color: #2d3748;
             --highlight-bg: rgba(74, 144, 164, 0.1);
             --highlight-border: rgba(74, 144, 164, 0.3);
+        }
+
+        [data-theme="light"] {
+            --primary-dark: #f8fafc;
+            --secondary-dark: #ffffff;
+            --accent-blue: #2563eb;
+            --accent-teal: #0891b2;
+            --accent-cyan: #06b6d4;
+            --text-light: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --highlight-bg: rgba(37, 99, 235, 0.1);
+            --highlight-border: rgba(37, 99, 235, 0.3);
         }
 
         * {
@@ -34,6 +49,30 @@
             color: var(--text-light);
             line-height: 1.7;
             overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 164, 0.3);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(74, 144, 164, 0.5);
         }
 
         /* Top Navigation */
@@ -43,10 +82,11 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(15, 20, 25, 0.95);
+            background: var(--secondary-dark);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 0;
+            transition: all 0.3s ease;
         }
 
         .nav-container {
@@ -112,6 +152,7 @@
             text-align: center;
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
             padding-top: 80px;
+            transition: all 0.3s ease;
         }
 
         .vanta-bg {
@@ -205,6 +246,7 @@
         .section {
             padding: 5rem 0;
             border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .section-title {
@@ -256,6 +298,7 @@
             border: 1px solid var(--border-color);
             min-height: 400px;
             position: relative;
+            transition: all 0.3s ease;
         }
 
         /* Concept Cards */
@@ -267,6 +310,7 @@
             margin-bottom: 2rem;
             transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
         }
 
         .concept-card:hover {
@@ -335,6 +379,7 @@
             border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .dark-forest-section::before {
@@ -396,6 +441,7 @@
             color: var(--accent-blue);
             text-align: center;
             position: relative;
+            transition: all 0.3s ease;
         }
 
         .math-formula::before {
@@ -417,6 +463,7 @@
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
             margin-bottom: 1.5rem;
+            position: relative;
         }
 
         .process-step:hover {
@@ -444,6 +491,7 @@
             border-radius: 0 12px 12px 0;
             font-style: italic;
             position: relative;
+            transition: all 0.3s ease;
         }
 
         .quote-block::before {
@@ -470,6 +518,7 @@
             border-radius: 12px;
             padding: 2rem;
             margin: 2rem 0;
+            transition: all 0.3s ease;
         }
 
         .key-concept h4 {
@@ -491,6 +540,7 @@
             border-radius: 12px;
             padding: 2rem;
             margin: 2rem 0;
+            transition: all 0.3s ease;
         }
 
         .definition-box h3 {
@@ -511,6 +561,7 @@
             border-radius: 12px;
             border-left: 4px solid;
             margin-bottom: 1rem;
+            transition: all 0.3s ease;
         }
 
         .crisis-item h4 {
@@ -523,20 +574,21 @@
             line-height: 1.6;
         }
 
-        /* Markov Chain Animation */
+        /* Improved Markov Chain Animation */
         .markov-container {
             position: relative;
-            height: 300px;
+            height: 350px;
             background: var(--secondary-dark);
             border-radius: 12px;
             padding: 2rem;
             margin: 2rem 0;
+            overflow: hidden;
         }
 
         .state-node {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
             display: flex;
@@ -544,27 +596,121 @@
             justify-content: center;
             color: white;
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(74, 144, 164, 0.3);
+            border: 3px solid var(--primary-dark);
         }
 
         .state-node:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(74, 144, 164, 0.5);
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(74, 144, 164, 0.6);
+            z-index: 10;
         }
 
-        .transition-arrow {
-            position: absolute;
-            font-size: 1.5rem;
-            color: var(--accent-blue);
+        .state-node.active {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .transition-arrow {
+            position: absolute;
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+            animation: flow 3s infinite;
+            text-shadow: 0 0 10px rgba(74, 144, 164, 0.5);
+        }
+
+        @keyframes flow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Enhanced Hypergraph Visualization */
+        .hypergraph-container {
+            position: relative;
+            height: 400px;
+            background: var(--secondary-dark);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .hyperedge {
+            position: absolute;
+            border: 2px dashed var(--accent-blue);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: rotate 20s linear infinite;
+        }
+
+        .agent-node {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 164, 0.3);
+            z-index: 5;
+        }
+
+        .agent-node:hover {
+            transform: scale(1.2);
+            z-index: 10;
+            box-shadow: 0 8px 25px rgba(74, 144, 164, 0.6);
+        }
+
+        .project-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(90, 138, 133, 0.3);
+            z-index: 5;
+        }
+
+        .project-node:hover {
+            transform: scale(1.15);
+            z-index: 10;
+            box-shadow: 0 8px 25px rgba(90, 138, 133, 0.6);
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), transparent);
+            transform-origin: left center;
+            opacity: 0.7;
+            animation: pulse-line 3s infinite;
+        }
+
+        @keyframes pulse-line {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
         }
 
         @keyframes rotate {
@@ -617,6 +763,7 @@
             background: var(--secondary-dark);
             border-radius: 16px;
             margin: 3rem 0;
+            transition: all 0.3s ease;
         }
 
         .download-btn {
@@ -659,6 +806,14 @@
                 flex-direction: column;
                 align-items: center;
             }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
         }
 
         /* Scroll Progress */
@@ -682,9 +837,132 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
         }
+
+        /* Human Body Section - NEW */
+        .human-body-section {
+            background: var(--secondary-dark);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .cell-item {
+            background: var(--primary-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cell-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(74, 144, 164, 0.2);
+        }
+
+        .cell-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cell-name {
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .cell-function {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Symbiosis Visualization */
+        .symbiosis-container {
+            position: relative;
+            height: 300px;
+            background: var(--secondary-dark);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .organelle {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-dark);
+        }
+
+        .organelle:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .mitochondria {
+            width: 100px;
+            height: 60px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-radius: 30px;
+            top: 50px;
+            left: 50px;
+            font-size: 0.8rem;
+        }
+
+        .nucleus {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            top: 120px;
+            left: 200px;
+            font-size: 0.9rem;
+        }
+
+        .ribosome {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            top: 200px;
+            left: 120px;
+            font-size: 0.7rem;
+        }
+
+        .exchange-arrow {
+            position: absolute;
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+            animation: exchange 4s infinite;
+        }
+
+        @keyframes exchange {
+            0%, 100% { opacity: 0.3; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(20px); }
+        }
     </style>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+
     <!-- Scroll Progress -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -708,14 +986,14 @@
         <div class="vanta-bg" id="vanta-bg"></div>
         <div class="hero-content">
             <h1 class="hero-title">Mathematics of Collective Mind</h1>
-            <p class="hero-subtitle">Как эволюционная ловушка привела нас к математике коллективной агентности</p>
+            <p class="hero-subtitle">Как эволюционная ловушка привела нас к математике коллективного разума</p>
             <p class="hero-description">
                 Исследование парадокса человечества: наша персональная агентность, 
                 эволюционировавшая для выживания, теперь угрожает нашему будущему 
                 в эпоху искусственного интеллекта.
             </p>
             <div class="cta-buttons">
-                <a href="#trap" class="cta-btn cta-primary">Погружение в проблематику</a>
+                <a href="#trap" class="cta-btn cta-primary">Начать исследование</a>
                 <button onclick="showDarkForest()" class="cta-btn cta-secondary">Теория Тёмного Леса</button>
             </div>
         </div>
@@ -902,6 +1180,66 @@
                 несовместимые с собственным существованием.</p>
             </div>
 
+            <!-- NEW: Human Body Cells Section -->
+            <div class="human-body-section">
+                <h3 class="subsection-title">Агентность внутри нас: клеточный уровень</h3>
+                <p style="margin-bottom: 2rem; color: var(--text-muted); line-height: 1.7;">
+                    <strong>Кажущиеся нам с высоты собственной эволюции неотъемлемыми частичками нас самих, 
+                    являются по своей сути симбиотическим сообществом множества агентов.</strong>
+                    Мы - не единые организмы, а экосистемы, где каждая клетка имеет свою агентность, 
+                    но подчиняется общим правилам многоклеточного существования.
+                </p>
+
+                <div class="cell-grid">
+                    <div class="cell-item" onclick="showCellInfo('mitochondria')">
+                        <div class="cell-icon">🔋</div>
+                        <div class="cell-name">Митохондрии</div>
+                        <div class="cell-function">Энергетические станции клетки - были свободными бактериями</div>
+                    </div>
+                    <div class="cell-item" onclick="showCellInfo('nucleus')">
+                        <div class="cell-icon">🧬</div>
+                        <div class="cell-name">Ядро</div>
+                        <div class="cell-function">Центр управления - хранит и передает генетическую информацию</div>
+                    </div>
+                    <div class="cell-item" onclick="showCellInfo('ribosomes')">
+                        <div class="cell-icon">🏭</div>
+                        <div class="cell-name">Рибосомы</div>
+                        <div class="cell-function">Фабрики белков - синтезируют белки по инструкциям ДНК</div>
+                    </div>
+                    <div class="cell-item" onclick="showCellInfo('membrane')">
+                        <div class="cell-icon">🛡️</div>
+                        <div class="cell-name">Клеточная мембрана</div>
+                        <div class="cell-function">Защитный барьер - контролирует обмен веществ</div>
+                    </div>
+                    <div class="cell-item" onclick="showCellInfo('lysosomes')">
+                        <div class="cell-icon">🗑️</div>
+                        <div class="cell-name">Лизосомы</div>
+                        <div class="cell-function">Санитары клетки - перерабатывают отходы и поврежденные компоненты</div>
+                    </div>
+                    <div class="cell-item" onclick="showCellInfo('golgi')">
+                        <div class="cell-icon">📦</div>
+                        <div class="cell-name">Аппарат Гольджи</div>
+                        <div class="cell-function">Почтовое отделение - сортирует и упаковывает белки</div>
+                    </div>
+                </div>
+
+                <div class="symbiosis-container">
+                    <div class="organelle mitochondria" onclick="showOrganelleInfo('mitochondria')">Митохондрия</div>
+                    <div class="organelle nucleus" onclick="showOrganelleInfo('nucleus')">Ядро</div>
+                    <div class="organelle ribosome" onclick="showOrganelleInfo('ribosome')">Рибосома</div>
+                    
+                    <div class="exchange-arrow" style="top: 80px; left: 160px;">→</div>
+                    <div class="exchange-arrow" style="top: 150px; left: 290px;">←</div>
+                    <div class="exchange-arrow" style="top: 220px; left: 170px;">→</div>
+                </div>
+
+                <div class="quote-block">
+                    <p><strong>Эндосимбиозная теория:</strong> Митохондрии и хлоропласты были когда-то 
+                    свободными бактериями, которые вошли в симбиоз с другими клетками. 
+                    Симбиоз стал мощным механизмом эволюции, позволивший создать сложные формы жизни.</p>
+                </div>
+            </div>
+
             <div class="content-grid">
                 <div>
                     <h3 class="subsection-title">Коллективная агентность в природе</h3>
@@ -921,7 +1259,7 @@
 
                     <div class="process-step expandable-card" onclick="toggleExpand(this)">
                         <h4 style="color: #27ae60; margin-bottom: 1rem;">🍄 Микоризные сети</h4>
-                        <p>"Дерево жизни" леса - позволяют растениям получать питательные вещества и сигналы об опасности.</p>
+                        <p>"Дерево жизни" леса - позволяет растениям получать питательные вещества и сигналы об опасности.</p>
                         <div class="expandable-content">
                             <p style="margin-top: 1rem; color: var(--text-muted);">
                                 Грибница соединяет корни растений, создавая подземную сеть коммуникации и обмена. 
@@ -1093,13 +1431,13 @@
                 </div>
             </div>
 
-            <!-- Hypergraph Network -->
+            <!-- Enhanced Hypergraph Network -->
             <div class="concept-card">
                 <h3 class="concept-title">Гиперграфовая байесовская сеть</h3>
                 
                 <div class="content-grid">
                     <div>
-                        <p style="line-height: 1.8; color: var(--text-light);">
+                        <p style="line-height: 1.8; color: var(--text-light); margin-bottom: 1.5rem;">
                             Для моделирования сложных отношений между агентами используются 
                             гиперграфовые байесовские сети — расширение традиционных байесовских сетей, 
                             позволяющее представлять многоместные зависимости между переменными.
@@ -1112,15 +1450,38 @@
                                 Будущее состояние зависит только от настоящего
                             </div>
                         </div>
+
+                        <div class="key-concept">
+                            <h4>Как работает гиперграф?</h4>
+                            <p>Гиперграф позволяет соединять более двух узлов одним ребром (гиперребром). 
+                            Это идеально подходит для моделирования команд, где один проект может включать 
+                            множество участников, и один участник может быть частью нескольких проектов.</p>
+                        </div>
                     </div>
                     
-                    <div class="visualization-container">
-                        <div id="hypergraph-network"></div>
+                    <div class="hypergraph-container" id="hypergraph-container">
+                        <!-- Agents -->
+                        <div class="agent-node" style="top: 50px; left: 50px;" onclick="showAgentInfo('A1')">Агент 1<br><small>Dev</small></div>
+                        <div class="agent-node" style="top: 50px; left: 150px;" onclick="showAgentInfo('A2')">Агент 2<br><small>Design</small></div>
+                        <div class="agent-node" style="top: 150px; left: 20px;" onclick="showAgentInfo('A3')">Агент 3<br><small>PM</small></div>
+                        <div class="agent-node" style="top: 150px; left: 180px;" onclick="showAgentInfo('A4')">Агент 4<br><small>QA</small></div>
+                        <div class="agent-node" style="top: 250px; left: 80px;" onclick="showAgentInfo('A5')">Агент 5<br><small>Data</small></div>
+                        <div class="agent-node" style="top: 250px; left: 180px;" onclick="showAgentInfo('A6')">Агент 6<br><small>ML</small></div>
+                        
+                        <!-- Projects -->
+                        <div class="project-node" style="top: 120px; left: 280px;" onclick="showProjectInfo('P1')">Проект A<br><small>Web App</small></div>
+                        <div class="project-node" style="top: 220px; left: 320px;" onclick="showProjectInfo('P2')">Проект B<br><small>Mobile</small></div>
+                        <div class="project-node" style="top: 50px; left: 350px;" onclick="showProjectInfo('P3')">Проект C<br><small>AI</small></div>
+                        
+                        <!-- Hyperedges (dashed circles) -->
+                        <div class="hyperedge" style="width: 180px; height: 180px; top: 20px; left: 10px;"></div>
+                        <div class="hyperedge" style="width: 150px; height: 150px; top: 100px; left: 270px;"></div>
+                        <div class="hyperedge" style="width: 120px; height: 120px; top: 200px; left: 300px;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Markov Dynamics -->
+            <!-- Enhanced Markov Dynamics -->
             <div class="concept-card">
                 <h3 class="concept-title">Марковская динамика переходов</h3>
                 
@@ -1131,27 +1492,34 @@
                             а марковские одеяла определяют границы зависимости между агентами в системе.
                         </p>
                         
-                        <p style="line-height: 1.8; color: var(--text-light);">
-                            Кликните на состояния, чтобы увидеть детали переходов и вероятностей.
+                        <p style="line-height: 1.8; color: var(--text-light); margin-bottom: 1rem;">
+                            <strong>Кликните на состояния</strong>, чтобы увидеть детали переходов и вероятностей.
                         </p>
+
+                        <div class="key-concept">
+                            <h4>Марковское свойство</h4>
+                            <p>Будущее состояние системы зависит только от её настоящего состояния, 
+                            но не от всей истории переходов. Это позволяет эффективно моделировать 
+                            динамику агентности без необходимости хранить всю историю.</p>
+                        </div>
                     </div>
                     
                     <div class="markov-container" id="markov-container">
-                        <!-- States will be positioned by JavaScript -->
-                        <div class="state-node" style="top: 50px; left: 50px;" onclick="showStateInfo('C')">C</div>
-                        <div class="state-node" style="top: 50px; left: 200px;" onclick="showStateInfo('I')">I</div>
-                        <div class="state-node" style="top: 150px; left: 300px;" onclick="showStateInfo('A')">A</div>
-                        <div class="state-node" style="top: 250px; left: 200px;" onclick="showStateInfo('M')">M</div>
-                        <div class="state-node" style="top: 250px; left: 50px;" onclick="showStateInfo('K')">K</div>
-                        <div class="state-node" style="top: 150px; left: -50px;" onclick="showStateInfo('F')">F</div>
+                        <!-- States positioned in a circle -->
+                        <div class="state-node" style="top: 20px; left: 50%; transform: translateX(-50%);" onclick="showStateInfo('C')">C</div>
+                        <div class="state-node" style="top: 50%; right: 20px; transform: translateY(-50%);" onclick="showStateInfo('I')">I</div>
+                        <div class="state-node" style="bottom: 20px; left: 50%; transform: translateX(-50%);" onclick="showStateInfo('A')">A</div>
+                        <div class="state-node" style="top: 50%; left: 20px; transform: translateY(-50%);" onclick="showStateInfo('M')">M</div>
+                        <div class="state-node" style="top: 80px; left: 80px;" onclick="showStateInfo('K')">K</div>
+                        <div class="state-node" style="bottom: 80px; right: 80px;" onclick="showStateInfo('F')">F</div>
                         
                         <!-- Transition arrows -->
-                        <div class="transition-arrow" style="top: 80px; left: 140px;">→</div>
-                        <div class="transition-arrow" style="top: 120px; left: 250px;">↓</div>
-                        <div class="transition-arrow" style="top: 200px; left: 250px;">↓</div>
-                        <div class="transition-arrow" style="top: 280px; left: 140px;">←</div>
-                        <div class="transition-arrow" style="top: 200px; left: 30px;">↑</div>
-                        <div class="transition-arrow" style="top: 120px; left: 30px;">↑</div>
+                        <div class="transition-arrow" style="top: 60px; right: 60px;">→</div>
+                        <div class="transition-arrow" style="bottom: 60px; right: 60px;">↓</div>
+                        <div class="transition-arrow" style="bottom: 60px; left: 60px;">←</div>
+                        <div class="transition-arrow" style="top: 60px; left: 60px;">↑</div>
+                        <div class="transition-arrow" style="top: 45%; left: 45%; transform: rotate(-45deg);">↗</div>
+                        <div class="transition-arrow" style="bottom: 45%; right: 45%; transform: rotate(-45deg);">↙</div>
                     </div>
                 </div>
             </div>
@@ -1265,7 +1633,47 @@
         </div>
     </section>
 
+    <!-- Download Section -->
+    <section class="download-section">
+        <div class="container">
+            <h3 style="margin-bottom: 1rem; color: var(--accent-blue); font-size: 1.8rem;">Исследуйте глубже</h3>
+            <p style="margin-bottom: 2rem; color: var(--text-muted); font-size: 1.1rem;">
+                Загрузите полную документацию для детального изучения концепций
+            </p>
+            <a href="#" class="download-btn" onclick="downloadPDF()">Скачать PDF</a>
+            <a href="#" class="download-btn" onclick="downloadBibtex()">BibTeX</a>
+            <a href="#" class="download-btn" onclick="showCitation()">Академические ссылки</a>
+        </div>
+    </section>
+
     <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '🌙';
+                themeToggle.title = 'Переключить на светлую тему';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '☀️';
+                themeToggle.title = 'Переключить на тёмную тему';
+            }
+            
+            // Save theme preference
+            localStorage.setItem('theme', body.getAttribute('data-theme'));
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+            const themeToggle = document.querySelector('.theme-toggle');
+            themeToggle.innerHTML = savedTheme === 'light' ? '☀️' : '🌙';
+        });
+
         // Initialize Vanta.js background
         VANTA.NET({
             el: "#vanta-bg",
@@ -1296,19 +1704,19 @@
         Plotly.newPlot('agency-gap-chart', agencyGapData, {
             title: {
                 text: 'Разрыв между личной и коллективной агентностью',
-                font: { color: '#e8ecf1' }
+                font: { color: 'var(--text-light)' }
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#e8ecf1' },
+            font: { color: 'var(--text-light)' },
             yaxis: { 
                 title: 'Уровень развития (%)', 
-                gridcolor: '#2d3748',
-                color: '#a0a8b8'
+                gridcolor: 'var(--border-color)',
+                color: 'var(--text-muted)'
             },
             xaxis: { 
-                gridcolor: '#2d3748',
-                color: '#a0a8b8'
+                gridcolor: 'var(--border-color)',
+                color: 'var(--text-muted)'
             }
         }, {responsive: true});
 
@@ -1331,19 +1739,19 @@
         Plotly.newPlot('trap-visualization', trapsData, {
             title: {
                 text: 'Интенсивность эволюционных ловушек',
-                font: { color: '#e8ecf1' }
+                font: { color: 'var(--text-light)' }
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#e8ecf1' },
+            font: { color: 'var(--text-light)' },
             yaxis: { 
                 title: 'Влияние на общество (%)', 
-                gridcolor: '#2d3748',
-                color: '#a0a8b8'
+                gridcolor: 'var(--border-color)',
+                color: 'var(--text-muted)'
             },
             xaxis: { 
-                gridcolor: '#2d3748',
-                color: '#a0a8b8'
+                gridcolor: 'var(--border-color)',
+                color: 'var(--text-muted)'
             }
         }, {responsive: true});
 
@@ -1359,46 +1767,18 @@
             },
             text: ['C', 'I', 'A', 'M', 'K', 'F'],
             textposition: 'middle center',
-            textfont: { color: '#e8ecf1', size: 18 },
+            textfont: { color: 'var(--text-light)', size: 18 },
             showlegend: false
         }];
 
         Plotly.newPlot('network-visualization', networkData, {
             title: {
                 text: 'Сеть агентности: компоненты вектора R',
-                font: { color: '#e8ecf1' }
+                font: { color: 'var(--text-light)' }
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#e8ecf1' },
-            xaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false },
-            yaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false }
-        }, {responsive: true});
-
-        // Hypergraph Network
-        const hypergraphData = [{
-            type: 'scatter',
-            mode: 'markers+text',
-            x: [0, 1, 2, 0.5, 1.5, 1, 0.3, 1.7, 1.2],
-            y: [1, 2, 1, 0.5, 0.5, 1.5, 1.3, 1.3, 0.8],
-            marker: {
-                size: [60, 60, 60, 40, 40, 40, 30, 30, 30],
-                color: ['#4a90a4', '#5a8a85', '#6bb6b8', '#4a90a4', '#5a8a85', '#6bb6b8', '#4a90a4', '#5a8a85', '#6bb6b8']
-            },
-            text: ['A1', 'A2', 'A3', 'P1', 'P2', 'P3', 'S1', 'S2', 'S3'],
-            textposition: 'middle center',
-            textfont: { color: '#e8ecf1', size: 12 },
-            showlegend: false
-        }];
-
-        Plotly.newPlot('hypergraph-network', hypergraphData, {
-            title: {
-                text: 'Гиперграфовая сеть агентов и проектов',
-                font: { color: '#e8ecf1' }
-            },
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#e8ecf1' },
+            font: { color: 'var(--text-light)' },
             xaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false },
             yaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false }
         }, {responsive: true});
@@ -1421,11 +1801,11 @@
         Plotly.newPlot('multi-agent-system', agents, {
             title: {
                 text: 'Многоагентная система коллективного интеллекта',
-                font: { color: '#e8ecf1' }
+                font: { color: 'var(--text-light)' }
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            font: { color: '#e8ecf1' },
+            font: { color: 'var(--text-light)' },
             xaxis: { range: [-1.5, 1.5], showgrid: false, zeroline: false, showticklabels: false },
             yaxis: { range: [-1.5, 1.5], showgrid: false, zeroline: false, showticklabels: false }
         }, {responsive: true});
@@ -1440,7 +1820,54 @@
                 'K': 'Капасити (Capacity): Доступность и ресурсы',
                 'F': 'Фильтры (Filters): Ограничения и условия'
             };
+            
+            // Highlight active state
+            document.querySelectorAll('.state-node').forEach(node => node.classList.remove('active'));
+            event.target.classList.add('active');
+            
             alert(`${info[state]}\n\nКликните для просмотра переходов в марковской цепи.`);
+        }
+
+        function showAgentInfo(agent) {
+            const info = {
+                'A1': 'Агент 1: Разработчик, эксперт в backend, интересуется масштабируемыми системами',
+                'A2': 'Агент 2: Дизайнер, специалист в UX/UI, фокус на пользовательском опыте',
+                'A3': 'Агент 3: PM, координатор проектов, навыки коммуникации и планирования',
+                'A4': 'Агент 4: QA инженер, тестирование и качество, детально-ориентированный',
+                'A5': 'Агент 5: Data Scientist, аналитика и ML, работает с большими данными',
+                'A6': 'Агент 6: ML Engineer, машинное обучение, фокус на алгоритмах'
+            };
+            alert(info[agent] || 'Информация об агенте');
+        }
+
+        function showProjectInfo(project) {
+            const info = {
+                'P1': 'Проект A: Веб-приложение, требуется команда из 4-5 человек, срок 3 месяца',
+                'P2': 'Проект B: Мобильное приложение, кроссплатформенная разработка, дедлайн 6 месяцев',
+                'P3': 'Проект C: AI система, исследовательский проект, неопределенные требования'
+            };
+            alert(info[project] || 'Информация о проекте');
+        }
+
+        function showCellInfo(cell) {
+            const info = {
+                'mitochondria': 'Митохондрии: Были свободными бактериями 1.5 млрд лет назад. Сейчас - энергетические станции клетки, производят ATP.',
+                'nucleus': 'Ядро: Защищает ДНК, контролирует все процессы в клетке. Содержит генетические инструкции.',
+                'ribosomes': 'Рибосомы: Синтезируют белки по инструкциям из ДНК. Работают как фабрики белков.',
+                'membrane': 'Клеточная мембрана: Селективный барьер, контролирует что входит и выходит из клетки.',
+                'lysosomes': 'Лизосомы: Перерабатывают отходы и поврежденные компоненты клетки. Санитары клетки.',
+                'golgi': 'Аппарат Гольджи: Упаковывает и сортирует белки для доставки в нужные части клетки.'
+            };
+            alert(info[cell] || 'Информация о клетке');
+        }
+
+        function showOrganelleInfo(organelle) {
+            const info = {
+                'mitochondria': 'Митохондрия: Эндосимбиоз - была свободной бактерией, теперь производит энергию для клетки.',
+                'nucleus': 'Ядро: Командный центр клетки, содержит ДНК - инструкции по сборке организма.',
+                'ribosome': 'Рибосома: Машина по производству белков, читает инструкции и собирает белки.'
+            };
+            alert(info[organelle] || 'Информация об органелле');
         }
 
         function toggleExpand(element) {
@@ -1462,8 +1889,16 @@
             document.getElementById('dark-forest').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function downloadPDF() {
+            alert('Функция скачивания PDF временно недоступна. Пожалуйста, свяжитесь с автором для получения полной версии.');
+        }
+
+        function downloadBibtex() {
+            alert('Функция скачивания BibTeX временно недоступна.');
+        }
+
         function showCitation() {
-            alert('Академические ссылки:\n\n• Шведская королевская академия наук, 2023\n• Mathematics of Collective Mind, 2024\n• Multi-Agent Systems Research, 2024');
+            alert('Академические ссылки:\n\n• Шведская королевская академия наук, 2023\n• Mathematics of Collective Mind, 2024\n• Multi-Agent Systems Research, 2024\n• Endosymbiotic Theory, Evolutionary Biology, 2024');
         }
 
         // Navigation
@@ -1507,6 +1942,11 @@
                 }
             });
         });
+
+        // Reset active states periodically for animations
+        setInterval(() => {
+            document.querySelectorAll('.state-node').forEach(node => node.classList.remove('active'));
+        }, 5000);
     </script>
 </body>
 </html>
