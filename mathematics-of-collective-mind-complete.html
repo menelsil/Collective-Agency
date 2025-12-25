@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics of Collective Mind - Полное исследование</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #0f1419;
+            --secondary-dark: #1a1f2e;
+            --accent-blue: #4a90a4;
+            --accent-teal: #5a8a85;
+            --accent-cyan: #6bb6b8;
+            --text-light: #e8ecf1;
+            --text-muted: #a0a8b8;
+            --border-color: #2d3748;
+            --highlight-bg: rgba(74, 144, 164, 0.1);
+            --highlight-border: rgba(74, 144, 164, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-blue);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            padding-top: 80px;
+        }
+
+        .vanta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            padding: 0 2rem;
+        }
+
+        .hero-title {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+            color: white;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 144, 164, 0.3);
+        }
+
+        .cta-secondary {
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .cta-secondary:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--accent-blue);
+        }
+
+        .subsection-title {
+            font-family: 'Crimson Text', serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent-teal);
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-bottom: 3rem;
+        }
+
+        .text-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+
+        .text-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .text-content strong {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        /* Visualization Containers */
+        .visualization-container {
+            background: var(--secondary-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            min-height: 400px;
+            position: relative;
+        }
+
+        /* Concept Cards */
+        .concept-card {
+            background: var(--secondary-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .concept-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(74, 144, 164, 0.1);
+        }
+
+        .concept-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            border-radius: 12px 12px 0 0;
+        }
+
+        .concept-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent-teal);
+        }
+
+        /* Expandable Cards */
+        .expandable-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .expandable-content.expanded {
+            max-height: 2000px;
+        }
+
+        .expand-button {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .expand-button:hover {
+            background: var(--accent-teal);
+        }
+
+        /* Dark Forest Section */
+        .dark-forest-section {
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--primary-dark) 100%);
+            padding: 4rem 0;
+            margin: 3rem 0;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-forest-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 1px, transparent 1px),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px;
+            pointer-events: none;
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .scenario-card {
+            background: var(--primary-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .scenario-card:hover {
+            border-color: var(--accent-blue);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(74, 144, 164, 0.2);
+        }
+
+        .scenario-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+
+        /* Mathematical Formulas */
+        .math-formula {
+            background: var(--secondary-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-blue);
+            text-align: center;
+            position: relative;
+        }
+
+        .math-formula::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Process Steps */
+        .process-step {
+            background: var(--secondary-dark);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .process-step:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .process-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Quote Blocks */
+        .quote-block {
+            border-left: 4px solid var(--accent-blue);
+            background: var(--highlight-bg);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            position: relative;
+        }
+
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            font-size: 4rem;
+            color: var(--accent-blue);
+            opacity: 0.3;
+            font-family: serif;
+        }
+
+        .quote-block p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-light);
+        }
+
+        /* Key Concepts */
+        .key-concept {
+            background: linear-gradient(135deg, rgba(74, 144, 164, 0.1), rgba(90, 138, 133, 0.1));
+            border: 1px solid var(--highlight-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .key-concept h4 {
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .key-concept p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, rgba(90, 138, 133, 0.1), rgba(107, 182, 184, 0.1));
+            border: 1px solid rgba(90, 138, 133, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .definition-box h3 {
+            color: var(--accent-teal);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .definition-box p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Crisis Items */
+        .crisis-item {
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-item h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .crisis-item p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Markov Chain Animation */
+        .markov-container {
+            position: relative;
+            height: 300px;
+            background: var(--secondary-dark);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .state-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 164, 0.3);
+        }
+
+        .state-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(74, 144, 164, 0.5);
+        }
+
+        .transition-arrow {
+            position: absolute;
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Gear Visualization */
+        .gear-visualization {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .gear {
+            width: 100%;
+            height: 100%;
+            border: 8px solid var(--accent-blue);
+            border-radius: 50%;
+            position: absolute;
+            animation: rotate 10s linear infinite;
+        }
+
+        .gear::before {
+            content: '';
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            box-shadow: 
+                0 64px 0 var(--accent-blue),
+                45px 45px 0 var(--accent-blue),
+                64px 0 0 var(--accent-blue),
+                45px -45px 0 var(--accent-blue),
+                0 -64px 0 var(--accent-blue),
+                -45px -45px 0 var(--accent-blue),
+                -64px 0 0 var(--accent-blue),
+                -45px 45px 0 var(--accent-blue);
+        }
+
+        /* Download Section */
+        .download-section {
+            text-align: center;
+            padding: 4rem 0;
+            background: var(--secondary-dark);
+            border-radius: 16px;
+            margin: 3rem 0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 144, 164, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .scenario-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* Floating Animation */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-logo">Mathematics of Collective Mind</div>
+            <ul class="nav-links">
+                <li><a href="#intro" class="nav-link active">Введение</a></li>
+                <li><a href="#trap" class="nav-link">Ловушка</a></li>
+                <li><a href="#agency" class="nav-link">Агентность</a></li>
+                <li><a href="#mathematics" class="nav-link">Математика</a></li>
+                <li><a href="#dark-forest" class="nav-link">Тёмный лес</a></li>
+                <li><a href="#applications" class="nav-link">Применение</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="intro" class="hero-section">
+        <div class="vanta-bg" id="vanta-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Mathematics of Collective Mind</h1>
+            <p class="hero-subtitle">Как эволюционная ловушка привела нас к математике коллективного разума</p>
+            <p class="hero-description">
+                Исследование парадокса человечества: наша персональная агентность, 
+                эволюционировавшая для выживания, теперь угрожает нашему будущему 
+                в эпоху искусственного интеллекта.
+            </p>
+            <div class="cta-buttons">
+                <a href="#trap" class="cta-btn cta-primary">Начать исследование</a>
+                <button onclick="showDarkForest()" class="cta-btn cta-secondary">Теория Тёмного Леса</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="intro-details" class="section">
+        <div class="container">
+            <h2 class="section-title">Введение в концепцию</h2>
+            
+            <div class="content-grid">
+                <div class="text-content">
+                    <p>Концепция «Математики коллективного разума» исследует фундаментальную проблему человечества: 
+                    <strong>разрыв между личной агентностью</strong> (способностью индивида к самостоятельному принятию решений) 
+                    и <strong>коллективной агентностью</strong> (способностью групп эффективно координировать действия).</p>
+                    
+                    <p>Этот разрыв создает «эволюционную ловушку» — структурную проблему, которая мешает человечеству 
+                    эффективно решать глобальные challenges и адаптироваться к меняющимся условиям.</p>
+
+                    <div class="key-concept">
+                        <h4>Прогресс без координации</h4>
+                        <p>Человечество накопило огромный когнитивный и технологический потенциал, но не развало 
+                        эквивалентных способностей к координации этого потенциала. Мы умеем создавать сложные технологии, 
+                        но не умеем эффективно координировать их разработку и применение.</p>
+                    </div>
+                </div>
+                
+                <div class="visualization-container">
+                    <div id="agency-gap-chart"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evolutionary Trap Section -->
+    <section id="trap" class="section">
+        <div class="container">
+            <h2 class="section-title">Эволюционная ловушка человечества</h2>
+            
+            <div class="definition-box">
+                <h3>Агентность (Agency)</h3>
+                <p>Понятие, которое с развитием технологий ИИ привлекает к себе всё больше внимания. 
+                В исходном, англоязычном смысле оно означает способность действовать самостоятельно, 
+                влиять на мир и достигать целей. <strong>Персональная агентность - наш эволюционный суперскилл.</strong> 
+                Мозг человека эволюционировал для выживания индивида и его ближайшего круга: 
+                конкуренция, распознавание угроз, максимизация личной выгоды.</p>
+            </div>
+
+            <div class="content-grid">
+                <div>
+                    <h3 class="subsection-title">Проблема масштаба</h3>
+                    
+                    <div class="process-step expandable-card" onclick="toggleExpand(this)">
+                        <h4 style="color: var(--accent-blue); margin-bottom: 1rem;">🧠 Эволюционный суперскилл</h4>
+                        <p>Мозг человека эволюционировал для выживания индивида: конкуренция, 
+                        распознавание угроз, максимизация личной выгоды.</p>
+                        <div class="expandable-content">
+                            <p style="margin-top: 1rem; color: var(--text-muted);">
+                                Но цивилизация, которую мы построили, породила проблемы, требующие иного масштаба - 
+                                <strong>коллективной агентности</strong>. Изначальный когнитивный взрыв, подаривший нам 
+                                сложный язык, абстрактное мышление, предиктивную аналитику, помог нам с генерацией 
+                                виртуальных конструктов, которые выходят за рамки биологических потребностей.
+                            </p>
+                        </div>
+                        <button class="expand-button">Развернуть</button>
+                    </div>
+
+                    <div class="process-step expandable-card" onclick="toggleExpand(this)">
+                        <h4 style="color: var(--accent-teal); margin-bottom: 1rem;">🏛️ Когнитивные технологии</h4>
+                        <p>Иерархии, мифы, религии, идеологии - инструменты масштабирования кооперации.</p>
+                        <div class="expandable-content">
+                            <p style="margin-top: 1rem; color: var(--text-muted);">
+                                Это когнитивные технологии, позволившие через общие нарративы масштабировать кооперацию 
+                                между людьми, которые никогда не встречались лично. Однако доминанта персональной 
+                                агентности постоянно вносит дисбаланс в наши коллективные цели.
+                            </p>
+                        </div>
+                        <button class="expand-button">Развернуть</button>
+                    </div>
+
+                    <div class="process-step expandable-card" onclick="toggleExpand(this)">
+                        <h4 style="color: #e74c3c; margin-bottom: 1rem;">⚠️ Дисбаланс персональной агентности</h4>
+                        <p>Постоянное вмешательство индивидуальных интересов в коллективные цели.</p>
+                        <div class="expandable-content">
+                            <ul style="margin-top: 1rem; color: var(--text-muted); line-height: 1.8;">
+                                <li>• Искажение трактовок общего блага ради индивидуальной выгоды</li>
+                                <li>• Манипуляции одних общественных групп другими через конфликты в нарративах</li>
+                                <li>• Иерархии неизбежно становятся ареной для проявления индивидуальных интересов</li>
+                                <li>• Недобросовестная конкуренция усиливает технологическую инерцию</li>
+                            </ul>
+                        </div>
+                        <button class="expand-button">Развернуть</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="visualization-container">
+                        <div id="trap-visualization"></div>
+                    </div>
+                    
+                    <div class="key-concept">
+                        <h4>Мы оказались в ловушке</h4>
+                        <p>Наша мощная эволюционная адаптивность, выраженная в развитом индивидуальном интеллекте, 
+                        стала причиной появления целого ряда глобальных проблем, которые невозможно решить в рамках 
+                        существующих коллективных институтов. Персональная агентность, давшая человеку власть над природой, 
+                        стала препятствием для выживания в созданной им же сложной цивилизации.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crisis Visualization -->
+            <div class="concept-card">
+                <h3 class="concept-title">Поликризис: 14 эволюционных ловушек</h3>
+                
+                <div class="quote-block">
+                    <p>Некоторые ученые рассматривают сложившуюся ситуацию как «поликризис». 
+                    Группа из Шведской королевской академии наук, которая в 2023 году выпустила исследование, 
+                    демонстрирует, что <strong>12 из 14 выявленных эволюционных ловушек для человечества 
+                    находятся в критической стадии</strong>.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="crisis-item" style="border-left-color: #e74c3c; background: rgba(231, 76, 60, 0.1);">
+                        <h4 style="color: #e74c3c;">Сверхпотребление</h4>
+                        <p style="color: var(--text-muted);">Превышение планетарных границ. Глобальное потребление ресурсов превышает возможности Земли к восстановлению.</p>
+                    </div>
+                    <div class="crisis-item" style="border-left-color: #f39c12; background: rgba(243, 156, 18, 0.1);">
+                        <h4 style="color: #f39c12;">Технологическая зависимость</h4>
+                        <p style="color: var(--text-muted);">Потеря резилиентности систем. Переход к сложным технологиям создаёт уязвимости при сбоях.</p>
+                    </div>
+                    <div class="crisis-item" style="border-left-color: #f1c40f; background: rgba(241, 196, 15, 0.1);">
+                        <h4 style="color: #f1c40f;">Разрыв с биосферой</h4>
+                        <p style="color: var(--text-muted);">Утрата связи с природой. Городская жизнь отделяет человека от природных циклов и экосистем.</p>
+                    </div>
+                    <div class="crisis-item" style="border-left-color: #27ae60; background: rgba(39, 174, 96, 0.1);">
+                        <h4 style="color: #27ae60;">Рост конфликтов</h4>
+                        <p style="color: var(--text-muted);">Увеличение внутренних противоречий. Социальная поляризация и потеря общих нарративов.</p>
+                    </div>
+                    <div class="crisis-item" style="border-left-color: #3498db; background: rgba(52, 152, 219, 0.1);">
+                        <h4 style="color: #3498db;">Информационный хаос</h4>
+                        <p style="color: var(--text-muted);">Потеря общих нарративов. Фейки, дезинформация и эхо-камеры разрушают общее поле знаний.</p>
+                    </div>
+                    <div class="crisis-item" style="border-left-color: #9b59b6; background: rgba(155, 89, 182, 0.1);">
+                        <h4 style="color: #9b59b6;">Управление ИИ</h4>
+                        <p style="color: var(--text-muted);">Неспособность контролировать создаваемый интеллект. Проблема выравнивания целей ИИ с человеческими ценностями.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--secondary-dark); border-radius: 12px;">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 1rem;">Дополнительные ловушки:</h4>
+                    <div class="grid md:grid-cols-2 gap-2 text-sm" style="color: var(--text-muted);">
+                        <div>• Демографический переход - старение населения</div>
+                        <div>• Экономическое неравенство - концентрация богатства</div>
+                        <div>• Климатическая нестабильность - экстремальные погодные явления</div>
+                        <div>• Ядерная угроза - потенциал самоуничтожения</div>
+                        <div>• Пандемический риск - глобальные эпидемии</div>
+                        <div>• Экологический коллапс - массовое вымирание видов</div>
+                        <div>• Кризис демократии - ослабление институтов</div>
+                        <div>• Миграционные кризисы - массовые перемещения людей</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; text-align: center; padding: 2rem; background: var(--highlight-bg); border-radius: 12px;">
+                    <p style="color: var(--text-light); font-size: 1.1rem;">
+                        <strong>Эта эволюционная ловушка угрожает способности человечества управлять развитием 
+                        искусственного интеллекта и решать такие экзистенциальные угрозы, как изменение климата, 
+                        пандемии, технологические катастрофы.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agency vs Intelligence Section -->
+    <section id="agency" class="section">
+        <div class="container">
+            <h2 class="section-title">Интеллект ≠ Агентность</h2>
+            
+            <div class="definition-box">
+                <h3>Ключевое различие</h3>
+                <p><strong>Интеллект</strong> — это способность обрабатывать информацию, решать задачи, делать выводы. 
+                <strong>Агентность</strong> — это способность иметь цели, принимать решения, действовать самостоятельно. 
+                Можно быть сверхразумным, но не иметь никаких целей. Или наоборот — поставить перед собой цели, 
+                несовместимые с собственным существованием.</p>
+            </div>
+
+            <div class="content-grid">
+                <div>
+                    <h3 class="subsection-title">Коллективная агентность в природе</h3>
+                    
+                    <div class="process-step expandable-card" onclick="toggleExpand(this)">
+                        <h4 style="color: #f39c12; margin-bottom: 1rem;">🐝 Пчелы и муравьи</h4>
+                        <p>Проявляют развитую коллективность для выживания и развития колонии.</p>
+                        <div class="expandable-content">
+                            <p style="margin-top: 1rem; color: var(--text-muted);">
+                                Даже особи-резервисты, которые почти никогда ничего не делают, 
+                                моментально включаются при возникновении чрезвычайных ситуаций. 
+                                Это демонстрирует идеальный баланс между специализацией и резилиентностью.
+                            </p>
+                        </div>
+                        <button class="expand-button">Развернуть</button>
+                    </div>
+
+                    <div class="process-step expandable-card" onclick="toggleExpand(this)">
+                        <h4 style="color: #27ae60; margin-bottom: 1rem;">🍄 Микоризные сети</h4>
+                        <p>"Дерево жизни" леса - позволяют растениям получать питательные вещества и сигналы об опасности.</p>
+                        <div class="expandable-content">
+                            <p style="margin-top: 1rem; color: var(--text-muted);">
+                                Грибница соединяет корни растений, создавая подземную сеть коммуникации и обмена. 
+                                Лес действует как единый организм, где старые деревья помогают молодым, 
+                                а растения предупреждают друг друга об опасностях.
+                            </p>
+                        </div>
+                        <button class="expand-button">Развернуть</button>
+                    </div>
+
+                    <div class="process-step expandable-card" onclick="toggleExpand(this)">
+                        <h4 style="color: #3498db; margin-bottom: 1rem;">🐦 Стая скворцов</h4>
+                        <p>Единый "разумный" рой без лидера, коллективно избегающий хищников.</p>
+                        <div class="expandable-content">
+                            <div style="margin-top: 1rem; padding: 1rem; background: var(--secondary-dark); border-radius: 8px;">
+                                <p style="color: var(--accent-blue); font-weight: 600; margin-bottom: 0.5rem;">Правила поведения:</p>
+                                <ol style="color: var(--text-muted); line-height: 1.6;">
+                                    <li>1. Сохраняй дистанцию до соседей</li>
+                                    <li>2. Выравнивай направление с соседями</li>
+                                    <li>3. Избегай хищников</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <button class="expand-button">Развернуть</button>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="visualization-container">
+                        <div id="network-visualization"></div>
+                    </div>
+                    
+                    <div class="key-concept">
+                        <h4>Общие принципы природных систем</h4>
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                <div style="width: 8px; height: 8px; background: var(--accent-blue); border-radius: 50%; margin-right: 0.5rem;"></div>
+                                <span style="color: var(--text-light);"><strong>Децентрализация</strong> - нет единого центра управления</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                <div style="width: 8px; height: 8px; background: var(--accent-blue); border-radius: 50%; margin-right: 0.5rem;"></div>
+                                <span style="color: var(--text-light);"><strong>Простейшие коммуникации</strong> - локальные взаимодействия</span>
+                            </div>
+                            <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                <div style="width: 8px; height: 8px; background: var(--accent-blue); border-radius: 50%; margin-right: 0.5rem;"></div>
+                                <span style="color: var(--text-light);"><strong>Эмерджентность</strong> - сложное из простого</span>
+                            </div>
+                        </div>
+                        <p style="color: var(--text-muted);">
+                            Эффективность, основанная на целенаправленном обмене информацией и взаимодействии, 
+                            позволяет таким системам согласовать простейшие индивидуальные интересы с интересами всего сообщества. 
+                            <strong>Персональная агентность</strong> каждого индивидуума в них снижена, 
+                            но <strong>коллективная - чрезвычайно развита</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mathematics Section -->
+    <section id="mathematics" class="section">
+        <div class="container">
+            <h2 class="section-title">Математика коллективной синергии</h2>
+            
+            <div class="quote-block">
+                <p>Основная проблема коллективной работы — не в недостатке умных людей, 
+                а в их неоптимальном соединении.</p>
+            </div>
+
+            <div class="content-grid">
+                <div>
+                    <h3 class="subsection-title">Проблема неоптимального соединения</h3>
+                    
+                    <div class="process-step">
+                        <h4 style="color: #e74c3c; margin-bottom: 1rem;">Собрать команду из пяти блестящих аналитиков</h4>
+                        <p style="color: var(--text-muted);">Это значит обречь проект на склоки и тупик. Задаче нужен оптимальный сетап: генератор идей, критик, координатор и коммуникатор.</p>
+                    </div>
+
+                    <div class="key-concept">
+                        <h4>Самый главный драйвер успеха</h4>
+                        <p><strong>Свободный выбор каждого члена команды.</strong> Коллективная агентность должна не подавлять, 
+                        а максимально раскрывать индивидуальную свободу. Свободу творить и создавать. 
+                        Свободу искать интересное и резонирующее с собственной индивидуальностью.</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div class="floating">
+                        <div class="gear-visualization">
+                            <div class="gear"></div>
+                            <div class="gear" style="width: 80%; height: 80%; top: 10%; left: 10%; animation-direction: reverse; animation-duration: 8s;"></div>
+                            <div class="gear" style="width: 60%; height: 60%; top: 20%; left: 60%; animation-duration: 6s;"></div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">Коллективная агентность должна раскрывать, а не подавлять индивидуальную свободу</p>
+                </div>
+            </div>
+
+            <!-- Mathematical Model -->
+            <div class="concept-card">
+                <h3 class="concept-title">Концепция "Шестерёнка ролей"</h3>
+                
+                <div class="quote-block">
+                    <p>Каждый человек - это неповторимое сочетание уникального опыта, знаний, навыков, 
+                    интуиции и мировосприятия. И именно в максимальной утилизации этого ресурса 
+                    заключена наша будущая коллективная агентность.</p>
+                </div>
+
+                <div class="content-grid">
+                    <div>
+                        <h4 style="color: var(--accent-blue); margin-bottom: 1rem; font-size: 1.2rem;">Математическая модель</h4>
+                        
+                        <div class="math-formula">
+                            <div style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-muted);">Вектор агентности роли:</div>
+                            <div style="font-size: 1.8rem; margin-bottom: 1.5rem;">R = (C, I, A, M, K, F)</div>
+                            <div style="font-size: 0.95rem; text-align: left; line-height: 1.8;">
+                                <div><strong>C</strong> - компетенции (competence embedding)</div>
+                                <div><strong>I</strong> - интересы (semantic embedding)</div>
+                                <div><strong>A</strong> - архетипы (как действует?)</div>
+                                <div><strong>M</strong> - мотивация (почему действует?)</div>
+                                <div><strong>K</strong> - доступность (capacity)</div>
+                                <div><strong>F</strong> - фильтры (языки, таймзоны, форматы)</div>
+                            </div>
+                        </div>
+                        
+                        <p style="color: var(--text-muted); line-height: 1.7;">
+                            Человек представляется как <strong>многомерный вектор в гиперграфовой байесовской сети</strong>. 
+                            Задача платформы - с использованием <strong>марковской динамики</strong> найти для проекта 
+                            (у которого тоже есть свой «вектор требований») не просто «лучших» людей, а 
+                            <strong>оптимальное множество участников в сети</strong>.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--accent-teal); margin-bottom: 1rem; font-size: 1.2rem;">Задача многокритериальной оптимизации</h4>
+                        
+                        <div style="space-y: 1rem;">
+                            <div class="process-step" style="border-left: 4px solid #27ae60; background: rgba(39, 174, 96, 0.1);">
+                                <div style="color: #27ae60; font-weight: 600; margin-bottom: 0.5rem;">✓ Покрыты все требуемые функции</div>
+                                <p style="color: var(--text-muted); font-size: 0.95rem;">Решена задача покрытия компетенций</p>
+                            </div>
+                            
+                            <div class="process-step" style="border-left: 4px solid #3498db; background: rgba(52, 152, 219, 0.1);">
+                                <div style="color: #3498db; font-weight: 600; margin-bottom: 0.5rem;">↑ Максимизирована когнитивная синергия</div>
+                                <p style="color: var(--text-muted); font-size: 0.95rem;">Стили мышления усиливают друг друга</p>
+                            </div>
+                            
+                            <div class="process-step" style="border-left: 4px solid #e74c3c; background: rgba(231, 76, 60, 0.1);">
+                                <div style="color: #e74c3c; font-weight: 600; margin-bottom: 0.5rem;">↓ Минимизирована избыточность</div>
+                                <p style="color: var(--text-muted); font-size: 0.95rem;">Нет дублирующих ролей и компетенций</p>
+                            </div>
+                            
+                            <div class="process-step" style="border-left: 4px solid #9b59b6; background: rgba(155, 89, 182, 0.1);">
+                                <div style="color: #9b59b6; font-weight: 600; margin-bottom: 0.5rem;">≈ Согласованы принципы</div>
+                                <p style="color: var(--text-muted); font-size: 0.95rem;">Участники разделяют общие или комплементарные ценности</p>
+                            </div>
+                        </div>
+                        
+                        <div class="math-formula" style="margin-top: 1.5rem;">
+                            <div style="font-size: 1rem; margin-bottom: 1rem;">Математически это задача многокритериальной оптимизации:</div>
+                            <div style="text-align: left; font-size: 0.95rem; line-height: 1.8;">
+                                <div>• Размер команды</div>
+                                <div>• Её синергия</div>
+                                <div>• Эффективность выполнения задач</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hypergraph Network -->
+            <div class="concept-card">
+                <h3 class="concept-title">Гиперграфовая байесовская сеть</h3>
+                
+                <div class="content-grid">
+                    <div>
+                        <p style="line-height: 1.8; color: var(--text-light);">
+                            Для моделирования сложных отношений между агентами используются 
+                            гиперграфовые байесовские сети — расширение традиционных байесовских сетей, 
+                            позволяющее представлять многоместные зависимости между переменными.
+                        </p>
+                        
+                        <div class="math-formula">
+                            <div style="margin-bottom: 1rem;">Марковское свойство:</div>
+                            <div style="font-size: 1.3rem; margin-bottom: 1rem;">P(S_{t+1} | S_t) = ∏ P(S_{t+1}^i | Parents(S_t^i))</div>
+                            <div style="font-size: 0.95rem; color: var(--text-muted);">
+                                Будущее состояние зависит только от настоящего
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <div id="hypergraph-network"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Markov Dynamics -->
+            <div class="concept-card">
+                <h3 class="concept-title">Марковская динамика переходов</h3>
+                
+                <div class="content-grid">
+                    <div>
+                        <p style="line-height: 1.8; color: var(--text-light); margin-bottom: 1.5rem;">
+                            Марковские цепи моделируют переходы между состояниями агентов, 
+                            а марковские одеяла определяют границы зависимости между агентами в системе.
+                        </p>
+                        
+                        <p style="line-height: 1.8; color: var(--text-light);">
+                            Кликните на состояния, чтобы увидеть детали переходов и вероятностей.
+                        </p>
+                    </div>
+                    
+                    <div class="markov-container" id="markov-container">
+                        <!-- States will be positioned by JavaScript -->
+                        <div class="state-node" style="top: 50px; left: 50px;" onclick="showStateInfo('C')">C</div>
+                        <div class="state-node" style="top: 50px; left: 200px;" onclick="showStateInfo('I')">I</div>
+                        <div class="state-node" style="top: 150px; left: 300px;" onclick="showStateInfo('A')">A</div>
+                        <div class="state-node" style="top: 250px; left: 200px;" onclick="showStateInfo('M')">M</div>
+                        <div class="state-node" style="top: 250px; left: 50px;" onclick="showStateInfo('K')">K</div>
+                        <div class="state-node" style="top: 150px; left: -50px;" onclick="showStateInfo('F')">F</div>
+                        
+                        <!-- Transition arrows -->
+                        <div class="transition-arrow" style="top: 80px; left: 140px;">→</div>
+                        <div class="transition-arrow" style="top: 120px; left: 250px;">↓</div>
+                        <div class="transition-arrow" style="top: 200px; left: 250px;">↓</div>
+                        <div class="transition-arrow" style="top: 280px; left: 140px;">←</div>
+                        <div class="transition-arrow" style="top: 200px; left: 30px;">↑</div>
+                        <div class="transition-arrow" style="top: 120px; left: 30px;">↑</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dark Forest Theory Section -->
+    <section id="dark-forest" class="section">
+        <div class="container">
+            <div class="dark-forest-section">
+                <h2 class="section-title">Теория Тёмного Леса</h2>
+                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 3rem; color: var(--text-muted);">
+                    Три сценария взаимодействия с внеземным разумом
+                </p>
+                
+                <div class="scenario-grid">
+                    <div class="scenario-card">
+                        <h3 class="scenario-title">Сценарий 1: Контакт</h3>
+                        <p style="color: var(--text-muted); line-height: 1.7;">
+                            Прямой контакт с внеземной цивилизацией. Высокий риск культурного шока 
+                            и технологической доминации. Вселенная - это тёмный лес, полный охотников.
+                        </p>
+                    </div>
+                    
+                    <div class="scenario-card">
+                        <h3 class="scenario-title">Сценарий 2: Наблюдение</h3>
+                        <p style="color: var(--text-muted); line-height: 1.7;">
+                            Пассивное наблюдение без вмешательства. Позволяет изучить другую цивилизацию 
+                            без непосредственного риска. Радикальная чуждость разумных форм.
+                        </p>
+                    </div>
+                    
+                    <div class="scenario-card">
+                        <h3 class="scenario-title">Сценарий 3: Изоляция</h3>
+                        <p style="color: var(--text-muted); line-height: 1.7;">
+                            Полная изоляция от других цивилизаций. Минимизирует риски, но ограничивает 
+                            возможности для обучения и роста. Мы становимся непонятным и неинтересным фоном.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="quote-block" style="position: relative; z-index: 2; margin-top: 3rem;">
+                    <p style="font-size: 1.2rem; text-align: center;">
+                        С невообразимой скоростью мы работаем над созданием иных форм интеллекта, 
+                        сущность которых мы сами до конца не понимаем. И самый важный вопрос XXI века звучит так: 
+                        <br><br>
+                        <strong style="color: var(--accent-blue);">
+                            Станем ли мы для них добычей в Тёмном Лесу, партнёрами в диалоге 
+                            или непонятным и неинтересным фоном - муравейником у дороги их собственной эволюции?
+                        </strong>
+                        <br><br>
+                        Ответ зависит от одного: сможем ли мы преодолеть свою главную эволюционную ловушку - 
+                        <strong>пропасть между персональной и коллективной агентностью</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="applications" class="section">
+        <div class="container">
+            <h2 class="section-title">Применение и будущее</h2>
+            
+            <div class="concept-card">
+                <h3 class="concept-title">От природы к искусственному интеллекту</h3>
+                
+                <div class="content-grid">
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem;">🤖</div>
+                        <h4 style="color: var(--accent-blue); margin-bottom: 1rem;">Мультиагентные системы ИИ</h4>
+                        <p style="color: var(--text-muted); line-height: 1.7;">
+                            Подход, когда каждый агент создаётся для решения конкретной задачи. 
+                            Разработчики общего искусственного интеллекта уже сейчас ставят задачи ограничения 
+                            и направления эмерджентных паттернов.
+                        </p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent-teal), var(--accent-cyan)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem;">⚡</div>
+                        <h4 style="color: var(--accent-teal); margin-bottom: 1rem;">Эмерджентные паттерны</h4>
+                        <p style="color: var(--text-muted); line-height: 1.7;">
+                            Высокоорганизованная мультиагентная система может самостоятельно идентифицировать 
+                            проблемы, мешающие её развитию. Человечество может стать "родителем" для интеллекта, 
+                            чьи мотивации останутся загадкой.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="quote-block">
+                    <p>Ключ к безопасному и продуктивному будущему — не в том, чтобы создать самое единое, 
+                    на уровне мотиваций, сообщество, или самый умный ИИ, который решит все проблемы, 
+                    а в том, чтобы <strong>научить интеллекты - и естественные, и искусственные - 
+                    согласовывать свои агентности.</strong></p>
+                </div>
+
+                <div class="key-concept">
+                    <h4>Как достичь согласования?</h4>
+                    <p>С помощством технологий. Представьте себе <strong>умный матчмейкинг</strong>, который позволяет человеку 
+                    подобрать проект для работы, группу по интересам, или исследование, в которое он может внести ключевой вклад.</p>
+                </div>
+            </div>
+
+            <!-- Multi-agent System Visualization -->
+            <div class="concept-card">
+                <h3 class="concept-title">Многоагентная система коллективного интеллекта</h3>
+                <div class="visualization-container">
+                    <div id="multi-agent-system"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download-section">
+        <div class="container">
+            <h3 style="margin-bottom: 1rem; color: var(--accent-blue); font-size: 1.8rem;">Исследуйте глубже</h3>
+            <p style="margin-bottom: 2rem; color: var(--text-muted); font-size: 1.1rem;">
+                Загрузите полную документацию для детального изучения концепций
+            </p>
+            <a href="#" class="download-btn" onclick="downloadPDF()">Скачать PDF</a>
+            <a href="#" class="download-btn" onclick="downloadBibtex()">BibTeX</a>
+            <a href="#" class="download-btn" onclick="showCitation()">Академические ссылки</a>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Vanta.js background
+        VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x4a90a4,
+            backgroundColor: 0x0f1419,
+            points: 8.00,
+            maxDistance: 25.00,
+            spacing: 18.00
+        });
+
+        // Agency Gap Visualization
+        const agencyGapData = [{
+            x: ['Личная агентность', 'Коллективная агентность'],
+            y: [85, 35],
+            type: 'bar',
+            marker: {
+                color: ['#4a90a4', '#5a8a85']
+            }
+        }];
+
+        Plotly.newPlot('agency-gap-chart', agencyGapData, {
+            title: {
+                text: 'Разрыв между личной и коллективной агентностью',
+                font: { color: '#e8ecf1' }
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: '#e8ecf1' },
+            yaxis: { 
+                title: 'Уровень развития (%)', 
+                gridcolor: '#2d3748',
+                color: '#a0a8b8'
+            },
+            xaxis: { 
+                gridcolor: '#2d3748',
+                color: '#a0a8b8'
+            }
+        }, {responsive: true});
+
+        // Evolutionary Traps Visualization
+        const trapsData = [{
+            x: ['Сверхпотребление', 'Техн. зависимость', 'Разрыв с биосферой', 'Рост конфликтов', 'Инф. хаос', 'Управление ИИ'],
+            y: [95, 88, 82, 85, 92, 78],
+            type: 'scatter',
+            mode: 'markers+lines',
+            marker: {
+                size: 15,
+                color: '#4a90a4'
+            },
+            line: {
+                color: '#5a8a85',
+                width: 4
+            }
+        }];
+
+        Plotly.newPlot('trap-visualization', trapsData, {
+            title: {
+                text: 'Интенсивность эволюционных ловушек',
+                font: { color: '#e8ecf1' }
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: '#e8ecf1' },
+            yaxis: { 
+                title: 'Влияние на общество (%)', 
+                gridcolor: '#2d3748',
+                color: '#a0a8b8'
+            },
+            xaxis: { 
+                gridcolor: '#2d3748',
+                color: '#a0a8b8'
+            }
+        }, {responsive: true});
+
+        // Network Visualization
+        const networkData = [{
+            type: 'scatter',
+            mode: 'markers+text',
+            x: [0, 1, 2, 1, 0.5, 1.5],
+            y: [1, 2, 1, 0, 0.5, 0.5],
+            marker: {
+                size: 80,
+                color: ['#4a90a4', '#5a8a85', '#6bb6b8', '#4a90a4', '#5a8a85', '#6bb6b8']
+            },
+            text: ['C', 'I', 'A', 'M', 'K', 'F'],
+            textposition: 'middle center',
+            textfont: { color: '#e8ecf1', size: 18 },
+            showlegend: false
+        }];
+
+        Plotly.newPlot('network-visualization', networkData, {
+            title: {
+                text: 'Сеть агентности: компоненты вектора R',
+                font: { color: '#e8ecf1' }
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: '#e8ecf1' },
+            xaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false },
+            yaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false }
+        }, {responsive: true});
+
+        // Hypergraph Network
+        const hypergraphData = [{
+            type: 'scatter',
+            mode: 'markers+text',
+            x: [0, 1, 2, 0.5, 1.5, 1, 0.3, 1.7, 1.2],
+            y: [1, 2, 1, 0.5, 0.5, 1.5, 1.3, 1.3, 0.8],
+            marker: {
+                size: [60, 60, 60, 40, 40, 40, 30, 30, 30],
+                color: ['#4a90a4', '#5a8a85', '#6bb6b8', '#4a90a4', '#5a8a85', '#6bb6b8', '#4a90a4', '#5a8a85', '#6bb6b8']
+            },
+            text: ['A1', 'A2', 'A3', 'P1', 'P2', 'P3', 'S1', 'S2', 'S3'],
+            textposition: 'middle center',
+            textfont: { color: '#e8ecf1', size: 12 },
+            showlegend: false
+        }];
+
+        Plotly.newPlot('hypergraph-network', hypergraphData, {
+            title: {
+                text: 'Гиперграфовая сеть агентов и проектов',
+                font: { color: '#e8ecf1' }
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: '#e8ecf1' },
+            xaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false },
+            yaxis: { range: [-0.5, 2.5], showgrid: false, zeroline: false, showticklabels: false }
+        }, {responsive: true});
+
+        // Multi-agent System
+        const agents = [];
+        for (let i = 0; i < 25; i++) {
+            agents.push({
+                x: [Math.cos(i * 2 * Math.PI / 25)],
+                y: [Math.sin(i * 2 * Math.PI / 25)],
+                mode: 'markers',
+                marker: {
+                    size: 15,
+                    color: `hsl(${i * 14.4}, 70%, 50%)`
+                },
+                showlegend: false
+            });
+        }
+
+        Plotly.newPlot('multi-agent-system', agents, {
+            title: {
+                text: 'Многоагентная система коллективного интеллекта',
+                font: { color: '#e8ecf1' }
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { color: '#e8ecf1' },
+            xaxis: { range: [-1.5, 1.5], showgrid: false, zeroline: false, showticklabels: false },
+            yaxis: { range: [-1.5, 1.5], showgrid: false, zeroline: false, showticklabels: false }
+        }, {responsive: true});
+
+        // Interactive functions
+        function showStateInfo(state) {
+            const info = {
+                'C': 'Компетенции (Competence): Набор навыков и знаний агента',
+                'I': 'Интересы (Interests): Семантическое пространство интересов',
+                'A': 'Архетипы (Archetypes): Паттерны поведения и действий',
+                'M': 'Мотивация (Motivation): Причины и цели действий',
+                'K': 'Капасити (Capacity): Доступность и ресурсы',
+                'F': 'Фильтры (Filters): Ограничения и условия'
+            };
+            alert(`${info[state]}\n\nКликните для просмотра переходов в марковской цепи.`);
+        }
+
+        function toggleExpand(element) {
+            const content = element.querySelector('.expandable-content');
+            const button = element.querySelector('.expand-button');
+            
+            if (content && button) {
+                if (content.classList.contains('expanded')) {
+                    content.classList.remove('expanded');
+                    button.textContent = 'Развернуть';
+                } else {
+                    content.classList.add('expanded');
+                    button.textContent = 'Свернуть';
+                }
+            }
+        }
+
+        function showDarkForest() {
+            document.getElementById('dark-forest').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadPDF() {
+            alert('Функция скачивания PDF временно недоступна. Пожалуйста, свяжитесь с автором для получения полной версии.');
+        }
+
+        function downloadBibtex() {
+            alert('Функция скачивания BibTeX временно недоступна.');
+        }
+
+        function showCitation() {
+            alert('Академические ссылки:\n\n• Шведская королевская академия наук, 2023\n• Mathematics of Collective Mind, 2024\n• Multi-Agent Systems Research, 2024');
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                const target = this.getAttribute('href').substring(1);
+                const element = document.getElementById(target);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Scroll progress
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+
+            // Update active navigation
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (scrollTop >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
